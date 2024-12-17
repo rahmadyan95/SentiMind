@@ -33,32 +33,83 @@ class MainPageView(ctk.CTkFrame):
         right_section_Main = ctk.CTkLabel(MainParent,bg_color='grey30',text='', height=637,width=500)
         right_section_Main.place(x=900,y=79)
 
-        box_1 = ctk.CTkLabel(right_section_Main,text='Number of comments scraped.',font=('Codec Pro',18), bg_color="grey30")
-        box_1.place(x=18,y=20)
+        box_1 = ctk.CTkLabel(right_section_Main,text='',height=300,width=400, bg_color="grey20")
+        box_1.place(x=28,y=20)
+
+        box_1_title = ctk.CTkLabel(right_section_Main,text='Total Comments Dataset',
+                                   text_color="black",height=65,width=415, 
+                                   bg_color="#B3C8CF",font=('Coda Pro',20))
+        box_1_title.place(x=20,y=20)
+
+
 
     def menu_section(self, MainParent):
+
         MenuSectionMain = ctk.CTkLabel(MainParent,bg_color='white',text='',height=600,width=860)
         MenuSectionMain.place(x=20,y=100)
+
+        # ============================== SECTION PATH ===========================================
+        TokopediaLogoPath = os.path.join(self.base_dir,"assets","image","logo-tokopedia.png")
+        ShopeeLogoPath = os.path.join(self.base_dir,"assets","image","shopee-logo2.png")
+        YoutubeLogoPath = os.path.join(self.base_dir,"assets","image","Youtube-Logo.png")
+        DBLogoPath = os.path.join(self.base_dir,"assets","image","db_logo.png")
+        SentimentAnalysisLogoPath = os.path.join(self.base_dir,"assets","image","sentiment_analysis.png")
+
         
-        button_1 = ctk.CTkButton(MenuSectionMain,width=200,height=300,corner_radius=0,fg_color='#5e4c83')
-        button_1.place(x=0,y=0)
-
-        button_2 = ctk.CTkButton(MenuSectionMain,width=300,height=300,corner_radius=0)
-        button_2.place(x=0,y=300)
-
-        button_3 = ctk.CTkButton(MenuSectionMain,width=200,height=300,corner_radius=0,fg_color='#6798b0')
-        button_3.place(x=660,y=0)
-
-        button_4 = ctk.CTkButton(MenuSectionMain,width=460,height=300,corner_radius=0,fg_color='#f09f9c')
-        button_4.place(x=200,y=0)
-
-        button_5 = ctk.CTkButton(MenuSectionMain,width=300,height=300,corner_radius=0)
-        button_5.place(x=560,y=300)
+        # =============================== END SECTION PATH ======================================
 
         app_logo_path = os.path.join(self.base_dir,"assets","image","Applogo2.png")
         logo = ctk.CTkImage(light_image=Image.open(app_logo_path), size=(180,180))
         logo_placeholder = ctk.CTkLabel(MenuSectionMain,image=logo,text='',fg_color='white')
         logo_placeholder.place(x=340,y=370)
+
+
+        # TOKOPEDIA SCRAPPER BUTTON ======== START ========
+        TokopediaLogo = ctk.CTkImage(light_image=Image.open(TokopediaLogoPath), size=(165,60))
+        TokopediaScrapperButton = ctk.CTkButton(MenuSectionMain,width=200,height=300,corner_radius=0,fg_color='#A5E1A6',text='',
+                                 font=('Coda Pro',28),image=TokopediaLogo,hover_color='grey30')
+        TokopediaScrapperButton.place(x=0,y=0)
+        
+        # TokopediaLogoPlaceholder = ctk.CTkButton(TokopediaScrapperButton,image=TokopediaLogo,text='')
+        # TokopediaLogoPlaceholder.place(x=20,y=20)
+
+        # TOKOPEDIA SCRAPPER BUTTON ======== END ========
+
+        # SHOPEE SCRAPPER BUTTON ======== START  ========
+        ShopeeLogo = ctk.CTkImage(light_image=Image.open(ShopeeLogoPath), size=(250,85))
+        ShopeeScrapperPageButton = ctk.CTkButton(MenuSectionMain,image=ShopeeLogo,text='',width=300,height=300,corner_radius=0,hover_color='grey30',fg_color='#FFB082')
+        ShopeeScrapperPageButton.place(x=0,y=300)
+
+        # SHOPEE SCRAPPER BUTTON ======== END  ========
+
+        
+        # YOUTUBE SCRAPPER BUTTON ======== START ========
+        YoutubeLogo = ctk.CTkImage(light_image=Image.open(YoutubeLogoPath), size=(165,55))
+        YoutubeScrapperPageButton = ctk.CTkButton(MenuSectionMain,width=200,height=300,corner_radius=0,fg_color='white',text='',image=YoutubeLogo,hover_color='grey30')
+        YoutubeScrapperPageButton.place(x=660,y=0)
+
+        # YOUTUBE SCRAPPER BUTTON ======== STOP ========
+
+        # SENTIMENT ANALYSIS BUTTON ========== START ============
+        
+        SentimentAnalysisLogo = ctk.CTkImage(light_image=Image.open(SentimentAnalysisLogoPath), size=(380,75))
+        SentimentAnalysisPageButton = ctk.CTkButton(MenuSectionMain,width=460,height=300,corner_radius=0,fg_color='#f09f9c',
+                                 text='',font=('Coda Pro',32),text_color='black',hover_color='grey30',image=SentimentAnalysisLogo)
+        SentimentAnalysisPageButton.place(x=200,y=0)
+
+        # SENTIMENT ANALYSIS BUTTON ========== END ============
+
+
+        # DATABASE BUTTON PAGE  ========== START  ============
+
+
+        DBLogo = ctk.CTkImage(light_image=Image.open(DBLogoPath), size=(230,75))
+        DBPageButton = ctk.CTkButton(MenuSectionMain,width=300,height=300,corner_radius=0,text='',image=DBLogo,fg_color='#B3C8CF',hover_color='grey30')
+        DBPageButton.place(x=560,y=300)
+
+        # DATABASE BUTTON PAGE  ========== END  ============
+
+       
 
         
     def bottombar(self,MainParent):
