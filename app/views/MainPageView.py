@@ -4,6 +4,9 @@ from tkinter import *
 import os
 from PIL import Image, ImageTk
 
+# MainFont = ctk.CTkFont()
+
+
 class MainPageView(ctk.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent)
@@ -15,6 +18,7 @@ class MainPageView(ctk.CTkFrame):
         self.bottombar(self)
         self.right_section(self)
         self.menu_section(self)
+        
 
     def sidebar(self,MainParent):
         SidebarParent = ctk.CTkLabel(MainParent,bg_color='white',text='')
@@ -28,6 +32,9 @@ class MainPageView(ctk.CTkFrame):
     def right_section(self,MainParent):
         right_section_Main = ctk.CTkLabel(MainParent,bg_color='grey30',text='', height=637,width=500)
         right_section_Main.place(x=900,y=79)
+
+        box_1 = ctk.CTkLabel(right_section_Main,text='Number of comments scraped.',font=('Codec Pro',18), bg_color="grey30")
+        box_1.place(x=18,y=20)
 
     def menu_section(self, MainParent):
         MenuSectionMain = ctk.CTkLabel(MainParent,bg_color='white',text='',height=600,width=860)
@@ -54,9 +61,6 @@ class MainPageView(ctk.CTkFrame):
         logo_placeholder.place(x=340,y=370)
 
         
-
-
-
     def bottombar(self,MainParent):
         BottombarParent = ctk.CTkLabel(MainParent,bg_color='grey10',text='')
         BottombarParent.place(anchor="sw", relwidth=1, relheight=0.09, rely=1)
