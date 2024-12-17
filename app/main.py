@@ -28,8 +28,8 @@ class tkinterApp(ctk.CTk):
 
 if __name__ == '__main__' :
     app = tkinterApp()
-    app.title('Emergency System')
+    app.title('Sentimind')
     app.geometry("1400x788")
-    app._set_appearance_mode("dark")
+    app._set_appearance_mode("light")
     app.resizable(False,False)
     app.mainloop()
