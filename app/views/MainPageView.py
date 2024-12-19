@@ -4,6 +4,8 @@ from tkinter import *
 import os
 from PIL import Image, ImageTk
 
+
+
 # MainFont = ctk.CTkFont()
 
 
@@ -14,6 +16,7 @@ class MainPageView(ctk.CTkFrame):
         self.base_dir = os.path.dirname(os.path.abspath(__file__))
         self.main_label = ctk.CTkLabel(self,bg_color='gray20',text='')
         self.main_label.place(anchor="nw", relwidth=1, relheight=1)
+        
         self.sidebar(self)
         self.bottombar(self)
         self.right_section(self)
@@ -55,6 +58,7 @@ class MainPageView(ctk.CTkFrame):
         DBLogoPath = os.path.join(self.base_dir,"assets","image","db_logo.png")
         SentimentAnalysisLogoPath = os.path.join(self.base_dir,"assets","image","sentiment_analysis.png")
 
+
         
         # =============================== END SECTION PATH ======================================
 
@@ -67,7 +71,7 @@ class MainPageView(ctk.CTkFrame):
         # TOKOPEDIA SCRAPPER BUTTON ======== START ========
         TokopediaLogo = ctk.CTkImage(light_image=Image.open(TokopediaLogoPath), size=(165,60))
         TokopediaScrapperButton = ctk.CTkButton(MenuSectionMain,width=200,height=300,corner_radius=0,fg_color='#A5E1A6',text='',
-                                 font=('Coda Pro',28),image=TokopediaLogo,hover_color='grey30')
+                                 font=('Coda Pro',28),image=TokopediaLogo,hover_color='grey30',command=lambda: self.controller.show_frame("TokopediaScrapperView"))
         TokopediaScrapperButton.place(x=0,y=0)
         
         # TokopediaLogoPlaceholder = ctk.CTkButton(TokopediaScrapperButton,image=TokopediaLogo,text='')
@@ -76,7 +80,7 @@ class MainPageView(ctk.CTkFrame):
         # TOKOPEDIA SCRAPPER BUTTON ======== END ========
 
         # SHOPEE SCRAPPER BUTTON ======== START  ========
-        ShopeeLogo = ctk.CTkImage(light_image=Image.open(ShopeeLogoPath), size=(250,85))
+        ShopeeLogo = ctk.CTkImage(light_image=Image.open(ShopeeLogoPath), size=(200,85))
         ShopeeScrapperPageButton = ctk.CTkButton(MenuSectionMain,image=ShopeeLogo,text='',width=300,height=300,corner_radius=0,hover_color='grey30',fg_color='#FFB082')
         ShopeeScrapperPageButton.place(x=0,y=300)
 
@@ -115,6 +119,17 @@ class MainPageView(ctk.CTkFrame):
     def bottombar(self,MainParent):
         BottombarParent = ctk.CTkLabel(MainParent,bg_color='grey10',text='')
         BottombarParent.place(anchor="sw", relwidth=1, relheight=0.09, rely=1)
+
+        # =============== SECTION PATH POWERED BY ==============================
+        PoweredByLogoPath  = os.path.join(self.base_dir,"assets","image","Logo.png")
+        PoweredByLogo = ctk.CTkImage(light_image=Image.open(PoweredByLogoPath), size=(390,45))
+
+        logo_placeholder = ctk.CTkLabel(BottombarParent,image=PoweredByLogo,text='',bg_color='grey10')
+        logo_placeholder.place(x=10,y=15)
+
+
+
+
 
     def main_button(self):
         main_button_place = ctk.CTkLabel(self.main_label,bg_color='red',text='') 
