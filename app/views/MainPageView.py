@@ -71,7 +71,7 @@ class MainPageView(ctk.CTkFrame):
         # TOKOPEDIA SCRAPPER BUTTON ======== START ========
         TokopediaLogo = ctk.CTkImage(light_image=Image.open(TokopediaLogoPath), size=(165,60))
         TokopediaScrapperButton = ctk.CTkButton(MenuSectionMain,width=200,height=300,corner_radius=0,fg_color='#A5E1A6',text='',
-                                 font=('Coda Pro',28),image=TokopediaLogo,hover_color='grey30',command=lambda: self.controller.show_frame("TokopediaScrapperView"))
+                                 font=('Coda Pro',28),image=TokopediaLogo,hover_color='grey30')
         TokopediaScrapperButton.place(x=0,y=0)
         
         # TokopediaLogoPlaceholder = ctk.CTkButton(TokopediaScrapperButton,image=TokopediaLogo,text='')
@@ -89,7 +89,7 @@ class MainPageView(ctk.CTkFrame):
         
         # YOUTUBE SCRAPPER BUTTON ======== START ========
         YoutubeLogo = ctk.CTkImage(light_image=Image.open(YoutubeLogoPath), size=(165,55))
-        YoutubeScrapperPageButton = ctk.CTkButton(MenuSectionMain,width=200,height=300,corner_radius=0,fg_color='white',text='',image=YoutubeLogo,hover_color='grey30')
+        YoutubeScrapperPageButton = ctk.CTkButton(MenuSectionMain,width=200,height=300,corner_radius=0,fg_color='white',text='',image=YoutubeLogo,hover_color='grey30',command=lambda: self.controller.show_frame("YoutubeScrapperView"))
         YoutubeScrapperPageButton.place(x=660,y=0)
 
         # YOUTUBE SCRAPPER BUTTON ======== STOP ========
