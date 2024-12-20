@@ -3,21 +3,7 @@ import re
 import emoji
 from googleapiclient.discovery import build
 
-class YoutubeScrapperModels :
 
-    def __init__(self):
-        pass
-    def GetVideoData(self):
-        pass
-
-    def GetDataDummy(self):
-        df = pd.DataFrame(pd.read_csv('C:\\Users\\Rahmadyan\\Documents\\Project\\sentimind\\app\\views\\assets\\Data.csv'))
-        selected = df[['review']]
-        data = selected.values.tolist()
-        RowLenght = len(selected)
-
-        return data,RowLenght
-        # return selected
 
 class YoutubeScrapperModel:
     def __init__(self):

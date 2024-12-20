@@ -7,10 +7,6 @@ from views.MainPageView import MainPageView
 from  views.GoogleAPIScrapperView import GoogleApiScrapperView  # Import the missing view
 from views.TokopediaScrapperView import TokopediaScrapperView
 
-
-
-
-
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
