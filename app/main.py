@@ -1,10 +1,9 @@
 import customtkinter as ctk
-from views.GoogleAPIScrapperView import GoogleApiScrapperView
 from views.MainPageView import MainPageView
 
 import customtkinter as ctk
 from views.MainPageView import MainPageView
-from  views.GoogleAPIScrapperView import GoogleApiScrapperView  # Import the missing view
+from  views.TokopediaScrapperView import TokopediaScrapperView  # Import the missing view
 from views.YoutubeScrapperView import YoutubeScrapperView
 
 class App(ctk.CTk):
@@ -20,7 +19,7 @@ class App(ctk.CTk):
         container.pack(fill="both", expand=True)
 
         # Register all frames here
-        for F in (MainPageView, GoogleApiScrapperView,YoutubeScrapperView):  # Add GoogleApiScrapperView here
+        for F in (MainPageView,TokopediaScrapperView,YoutubeScrapperView):  # Add GoogleApiScrapperView here
             frame = F(container, self)
             self.frames[F.__name__] = frame  # Use class name as the key
             frame.place(relx=0, rely=0, relwidth=1, relheight=1)

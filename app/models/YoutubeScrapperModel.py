@@ -1,9 +1,8 @@
-import pandas as pd 
+import pandas as pd
 import re
 import emoji
 from googleapiclient.discovery import build
-
-
+from datetime import datetime
 
 class YoutubeScrapperModel:
     def __init__(self):
@@ -48,6 +47,19 @@ class YoutubeScrapperModel:
 
         return comment, emoji_count, url_count, char_count, digit_count, whitespace_count
 
+    def get_video_title(self, video_id):
+        youtube = build(self.api_service_name, self.api_version, developerKey=self.DEVELOPER_KEY)
+        request = youtube.videos().list(
+            part="snippet",
+            id=video_id
+        )
+        response = request.execute()
+        
+        if response['items']:
+            return response['items'][0]['snippet']['title']
+        else:
+            return "Unknown Title"
+
     def get_comments(self, youtube_link, max_comments):
         # Ensure the youtube_link is a list with one element if it's not already a list
         if isinstance(youtube_link, str):
@@ -58,7 +70,7 @@ class YoutubeScrapperModel:
     
         video_ids = links
         youtube = build(self.api_service_name, self.api_version, developerKey=self.DEVELOPER_KEY)
-        comments_list = []
+        comments_data = []
 
         # Variabel untuk menghitung total jumlah yang dihapus
         total_emoji_count = 0
@@ -68,6 +80,9 @@ class YoutubeScrapperModel:
         total_whitespace_count = 0
 
         for video_id in video_ids:
+            # Get video title
+            video_title = self.get_video_title(video_id)
+            
             request = youtube.commentThreads().list(
                 part="snippet",
                 videoId=video_id,
@@ -77,6 +92,9 @@ class YoutubeScrapperModel:
 
             for item in response['items']:
                 comment = item['snippet']['topLevelComment']['snippet']['textDisplay']
+                # Get current date (without time)
+                current_date = datetime.now().strftime('%d %B %Y')
+
                 cleaned_comment, emoji_count, url_count, char_count, digit_count, whitespace_count = self.clean_comment(comment)
                 
                 # Akumulasi jumlah yang dihapus
@@ -86,14 +104,16 @@ class YoutubeScrapperModel:
                 total_digit_count += digit_count
                 total_whitespace_count += whitespace_count
 
-                comments_list.append(cleaned_comment)
+                comments_data.append(cleaned_comment)
 
         return {
+            'date': current_date,
+            'video_title': video_title,
+            'video_id' : video_ids[0], 
             'total_emoji_removed': total_emoji_count,
             'total_url_removed': total_url_count,
             'total_char_removed': total_char_count,
             'total_digit_removed': total_digit_count,
             'total_whitespace_removed': total_whitespace_count,
-            'cleaned_comments': comments_list
+            'comments_data': comments_data
         }
-
