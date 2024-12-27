@@ -5,6 +5,7 @@ import customtkinter as ctk
 from views.MainPageView import MainPageView
 from  views.TokopediaScrapperView import TokopediaScrapperView  # Import the missing view
 from views.YoutubeScrapperView import YoutubeScrapperView
+from views.SentimentAnalysisDataListView import SentimentAnalysisDataListView
 
 class App(ctk.CTk):
     def __init__(self):
@@ -19,12 +20,12 @@ class App(ctk.CTk):
         container.pack(fill="both", expand=True)
 
         # Register all frames here
-        for F in (MainPageView,TokopediaScrapperView,YoutubeScrapperView):  # Add GoogleApiScrapperView here
+        for F in (MainPageView,TokopediaScrapperView,YoutubeScrapperView,SentimentAnalysisDataListView):  # Add GoogleApiScrapperView here
             frame = F(container, self)
             self.frames[F.__name__] = frame  # Use class name as the key
             frame.place(relx=0, rely=0, relwidth=1, relheight=1)
 
-        self.show_frame('MainPageView')  # Start with MainPageView
+        self.show_frame('SentimentAnalysisDataListView')  # Start with MainPageView
 
     def show_frame(self, cont):
         frame = self.frames[cont]

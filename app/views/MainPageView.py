@@ -32,6 +32,8 @@ class MainPageView(ctk.CTkFrame):
         logo_placeholder = ctk.CTkLabel(SidebarParent,image=logo,text='',fg_color='transparent')
         logo_placeholder.place(x=90,y=8)
 
+        
+
     def right_section(self,MainParent):
         right_section_Main = ctk.CTkLabel(MainParent,bg_color='grey30',text='', height=637,width=500)
         right_section_Main.place(x=900,y=79)
