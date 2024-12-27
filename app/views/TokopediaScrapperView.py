@@ -2,7 +2,7 @@ import customtkinter as ctk
 import os
 from PIL import Image
 import tkinter as tk
-import CTkMessagebox
+from CTkMessagebox import *
 from CTkTable import *
 import sys
 
@@ -10,12 +10,14 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from controllers.TokopediaScrapperController import TokopediaScrapperController
+from utils.utils import utils
 
 class TokopediaScrapperView(ctk.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
         self.InstancesControler = TokopediaScrapperController()
+        self.utilsInstances = utils()
 
         self.base_dir = os.path.dirname(os.path.abspath(__file__))
         self.sidebar(self)
@@ -55,8 +57,8 @@ class TokopediaScrapperView(ctk.CTkFrame):
         TokopediaLinkTitle = ctk.CTkLabel(box_1, font=('FiraCode Nerd Font',18),text="Tokopedia Link:")
         TokopediaLinkTitle.place(x=10, y=60)
 
-        YoutubeMaxCommentTitle = ctk.CTkLabel(box_1, font=('FiraCode Nerd Font',14),text="Max Slide")
-        YoutubeMaxCommentTitle.place(x=300, y=60)
+        TokopediaMaxCommentTitle = ctk.CTkLabel(box_1, font=('FiraCode Nerd Font',14),text="Max Slide")
+        TokopediaMaxCommentTitle.place(x=300, y=60)
 
         self.TokopediaLinkInput = ctk.CTkEntry(box_1,height=90,width=280,fg_color='grey30',
                                           font=('FiraCode Nerd Font',18),corner_radius=3,placeholder_text="[Link Product]/review")
@@ -104,7 +106,7 @@ class TokopediaScrapperView(ctk.CTkFrame):
         for widget in self.statistic_box.winfo_children():
             widget.destroy()
 
-        self.YoutubeLinkInput.delete(0, tk.END)
+        self.TokopediaLinkInput.delete(0, tk.END)
         self.sumOfSlide.delete(0, tk.END)
 
         # Recreate the link_place label
@@ -114,16 +116,25 @@ class TokopediaScrapperView(ctk.CTkFrame):
         ctk.CTkLabel(self, text="Data reloaded successfully!", font=('Coda Pro', 18)).place(x=400, y=800)
 
     def validate(self):
-        if not self.TokopediaLinkInput.get() or not self.sumOfSlide.get():
-            msg = CTkMessagebox(self,title="Warning", message="Youtube Link or Max of commentar is empty",
-                        icon="warning", option_1="Return")
-            response = msg.get()
-            
+
+        if self.utilsInstances.connection_check() :
+            if not self.TokopediaLinkInput.get() or not self.sumOfSlide.get():
+                msg = CTkMessagebox(self,title="Warning", message="Youtube Link or Max of commentar is empty",
+                            icon="warning", option_1="Return")
+                response = msg.get()
+                
+                if response=="Return":
+                    return
+                
+            else :
+                self.show_table()
+        else :
+            msg_2 = CTkMessagebox(self,title="Warning", message="Check your Connection",
+                    icon="warning", option_1="Return")
+            response = msg_2.get()
+                
             if response=="Return":
                 return
-            
-        else :
-            self.show_table()
 
     def left_side(self):
         link_box = ctk.CTkLabel(self,height=70,width=870,bg_color='grey30',text='')
@@ -152,10 +163,11 @@ class TokopediaScrapperView(ctk.CTkFrame):
         print(self.result)  # Inspect the contents of result
 
         if isinstance(self.result, dict):  # Ensure result is a dictionary
+            title = self.result['product_name']
             cleaned_comments = self.result['cleaned_text_list']  # Access the list of cleaned comments
             values = [[comment] for comment in cleaned_comments]
             row_count = len(values)
-            # self.link_place.configure(text=f"{self.title}")  # Set product title in link placeholder
+            self.link_place.configure(text=f"{title}")  # Set product title in link placeholder
 
             # Create and display table
             table = CTkTable(

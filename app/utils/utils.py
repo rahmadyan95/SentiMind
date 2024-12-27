@@ -3,6 +3,7 @@ import sys
 import subprocess
 import re
 import emoji
+import socket
 
 class utils: 
     def __init__(self):
@@ -10,11 +11,10 @@ class utils:
     
     def connection_check(self):
         try:
-            # Try to connect to Google's website (www.google.com) using the `ping` command
-            subprocess.check_output(["ping", "-c", "1", "www.google.com"])
-            return True  # Internet connection is available
-        except subprocess.CalledProcessError:
-            return False  # No internet connection
+            socket.create_connection(("www.google.com", 80))
+            return True
+        except OSError:
+            return False
         
     def count_elements(self, comments):
         if isinstance(comments, list):

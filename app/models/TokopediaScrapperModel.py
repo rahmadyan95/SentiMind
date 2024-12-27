@@ -34,10 +34,14 @@ class TokopediaScrapperModel:
         total_whitespace_count = 0
         total_cleaned_text = []
 
-        for i in range(0, pages):
-            soup = BeautifulSoup(driver.page_source, "html.parser")
-            containers = soup.find_all('article', attrs={'class': 'css-72zbc4'})
+        soup = BeautifulSoup(driver.page_source, "html.parser")
 
+        product_name = soup.find('p', {'data-unify': 'Typography', 'class': 'css-1scsi0-unf-heading e1qvo2ff8'})
+
+        for i in range(0, pages):
+            
+            containers = soup.find_all('article', attrs={'class': 'css-72zbc4'})
+            
             for container in containers:
                 review = container.find('span', attrs={'data-testid': 'lblItemUlasan'})
 
@@ -73,6 +77,7 @@ class TokopediaScrapperModel:
 
         # Return the data in the desired structure for further processing
         return {
+            "product_name" : product_name.text, 
             "total_emoji_removed": total_emoji_count,
             "total_url_removed": total_url_count,
             "total_char_removed": total_char_count,
