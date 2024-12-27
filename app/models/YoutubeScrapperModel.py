@@ -3,24 +3,20 @@ import re
 import emoji
 from googleapiclient.discovery import build
 from datetime import datetime
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 class YoutubeScrapperModel:
     def __init__(self):
         self.api_service_name = "youtube"
         self.api_version = "v3"
-        self.DEVELOPER_KEY = "AIzaSyBEKtCtSScCXf3pwfq9LF-xxDrpkSyIzhs"
+        self.DEVELOPER_KEY = os.getenv('YOUTUBE_API_KEY')
 
     def count_elements(self, comment):
-        # Hitung jumlah emoji
         emoji_count = len(emoji.emoji_list(comment))
-        
-        # Hitung jumlah URL
         url_count = len(re.findall(r'http\S+|www\.\S+', comment))
-        
-        # Hitung jumlah karakter (termasuk spasi)
         char_count = len(comment)
-        
-        # Hitung jumlah digit
         digit_count = len(re.findall(r'\d', comment))
         
         # Hitung jumlah whitespace (spasi, tab, baris baru)
@@ -117,3 +113,6 @@ class YoutubeScrapperModel:
             'total_whitespace_removed': total_whitespace_count,
             'comments_data': comments_data
         }
+
+# test = YoutubeScrapperModel()
+# print(test.get_comments('https://www.youtube.com/watch?v=LFiJOqn_EYI',20))

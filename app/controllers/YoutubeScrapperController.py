@@ -5,7 +5,7 @@ from app.models.YoutubeScrapperModel import YoutubeScrapperModel
 from app.database.database import DatabaseUtils
 import sqlite3
 
-class TokopediaScrapperController:
+class YoutubeScrapperController:
     def get_data(self,youtube_link,num_commets):
         instance = YoutubeScrapperModel()
         return instance.get_comments(youtube_link=youtube_link,max_comments=num_commets)

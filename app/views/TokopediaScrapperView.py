@@ -1,10 +1,15 @@
 import customtkinter as ctk
-from controllers.TokopediaScrapperController import TokopediaScrapperController
 import os
 from PIL import Image
 import tkinter as tk
 import CTkMessagebox
+from CTkTable import *
+import sys
 
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+
+from controllers.TokopediaScrapperController import TokopediaScrapperController
 
 class TokopediaScrapperView(ctk.CTkFrame):
     def __init__(self, parent, controller):
@@ -53,14 +58,14 @@ class TokopediaScrapperView(ctk.CTkFrame):
         YoutubeMaxCommentTitle = ctk.CTkLabel(box_1, font=('FiraCode Nerd Font',14),text="Max Slide")
         YoutubeMaxCommentTitle.place(x=300, y=60)
 
-        self.YoutubeLinkInput = ctk.CTkEntry(box_1,height=90,width=280,fg_color='grey30',
+        self.TokopediaLinkInput = ctk.CTkEntry(box_1,height=90,width=280,fg_color='grey30',
                                           font=('FiraCode Nerd Font',18),corner_radius=3,placeholder_text="[Link Product]/review")
-        self.YoutubeLinkInput.place(x=10,y=90)
+        self.TokopediaLinkInput.place(x=10,y=90)
 
-        self.SumOfCommentar = ctk.CTkEntry(box_1,height=90,width=90,fg_color='grey30',
+        self.sumOfSlide = ctk.CTkEntry(box_1,height=90,width=90,fg_color='grey30',
                                           font=('FiraCode Nerd Font',43),corner_radius=3,
                                           placeholder_text='Max 100')
-        self.SumOfCommentar.place(x=300,y=90)
+        self.sumOfSlide.place(x=300,y=90)
 
         SearchButton = ctk.CTkButton(box_1,height=40,width=380,fg_color='#6c8ca4',font=('Coda Pro',18),
                                      text='SEARCH',hover_color='grey50',text_color='black',corner_radius=3,
@@ -100,7 +105,7 @@ class TokopediaScrapperView(ctk.CTkFrame):
             widget.destroy()
 
         self.YoutubeLinkInput.delete(0, tk.END)
-        self.SumOfCommentar.delete(0, tk.END)
+        self.sumOfSlide.delete(0, tk.END)
 
         # Recreate the link_place label
         self.link_place = ctk.CTkLabel(self.link_input, font=('FiraCode Nerd Font', 15), text="")
@@ -109,7 +114,7 @@ class TokopediaScrapperView(ctk.CTkFrame):
         ctk.CTkLabel(self, text="Data reloaded successfully!", font=('Coda Pro', 18)).place(x=400, y=800)
 
     def validate(self):
-        if not self.YoutubeLinkInput.get() or not self.SumOfCommentar.get():
+        if not self.TokopediaLinkInput.get() or not self.sumOfSlide.get():
             msg = CTkMessagebox(self,title="Warning", message="Youtube Link or Max of commentar is empty",
                         icon="warning", option_1="Return")
             response = msg.get()
@@ -137,3 +142,56 @@ class TokopediaScrapperView(ctk.CTkFrame):
         self.TabelBox = ctk.CTkScrollableFrame(self,height=575,width=850,bg_color='transparent',
                                           fg_color='grey30')
         self.TabelBox.place(x=15,y=185)
+
+    def show_table(self):
+        num_of_comment: int = int(self.sumOfSlide.get())  # Convert to int
+        self.result = self.InstancesControler.start_scrapping(self.TokopediaLinkInput.get(), num_of_comment)
+
+        # Debug print statement
+        print(f"Type of result: {type(self.result)}")
+        print(self.result)  # Inspect the contents of result
+
+        if isinstance(self.result, dict):  # Ensure result is a dictionary
+            cleaned_comments = self.result['cleaned_text_list']  # Access the list of cleaned comments
+            values = [[comment] for comment in cleaned_comments]
+            row_count = len(values)
+            # self.link_place.configure(text=f"{self.title}")  # Set product title in link placeholder
+
+            # Create and display table
+            table = CTkTable(
+                self.TabelBox,
+                row=row_count,
+                column=1,
+                values=values,
+                corner_radius=0,
+                font=('Coda Pro', 15),
+                width=840,
+                wraplength=1500,
+                justify='W'
+            )
+            table.grid(padx=0, pady=0, sticky='nw')
+
+            # Statistics (Emoji, URL, Character, Digit, Whitespace)
+            datalist = [
+                ('Emoji', self.result['total_emoji_removed']),
+                ('Url', self.result['total_url_removed']),
+                ('Character', self.result['total_char_removed']),
+                ('Digit', self.result['total_digit_removed']),
+                ('Whitespace', self.result['total_whitespace_removed'])
+            ]
+
+            # Display statistics in the UI
+            for data, count in datalist:
+                CleannedBox = ctk.CTkLabel(self.statistic_box, height=135, width=365, text='', fg_color='grey30',
+                                        corner_radius=4)
+                CleannedBox.grid(padx=10, pady=5)
+
+                CleannedTitle = ctk.CTkLabel(CleannedBox, text=f'{data} Cleanned Count :', font=('FiraCode Nerd Font', 18),
+                                            fg_color='grey30', corner_radius=4)
+                CleannedTitle.place(x=10, y=10)
+
+                CleannedText = ctk.CTkLabel(CleannedBox, text=f'{count}', font=('FiraCode Nerd Font', 45),
+                                            fg_color='grey30', corner_radius=4)
+                CleannedText.place(relx=0.5, rely=0.6, anchor="center")
+        else:
+            print("Error: result is not a dictionary")

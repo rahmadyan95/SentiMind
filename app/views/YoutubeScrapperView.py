@@ -10,14 +10,15 @@ from CTkMessagebox import CTkMessagebox
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
-from app.controllers.YoutubeScrapperController import TokopediaScrapperController
+from app.controllers.YoutubeScrapperController import YoutubeScrapperController
 import sqlite3
+
 
 class YoutubeScrapperView(ctk.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
-        self.InstancesControler = TokopediaScrapperController()
+        self.InstancesControler = YoutubeScrapperController()
 
         self.base_dir = os.path.dirname(os.path.abspath(__file__))
         self.sidebar(self)
