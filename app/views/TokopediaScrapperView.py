@@ -5,6 +5,7 @@ import tkinter as tk
 from CTkMessagebox import *
 from CTkTable import *
 import sys
+import sqlite3
 
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
@@ -86,7 +87,7 @@ class TokopediaScrapperView(ctk.CTkFrame):
 
         submit_button = ctk.CTkButton(right_section_Main,height=40,width=300,fg_color='#5DB996',font=('Coda Pro',18),
                                      text='Save to database 🗂️',hover_color='#118B50',text_color='black',corner_radius=3,
-                                     )
+                                     command=self.SaveToDatabase)
                                      
         submit_button.place(x=130, y=650)
 
@@ -154,6 +155,52 @@ class TokopediaScrapperView(ctk.CTkFrame):
                                           fg_color='grey30')
         self.TabelBox.place(x=15,y=185)
 
+    def SaveToDatabase(self):
+        # print(self.result)  # For debugging purposes, to check the content of self.result
+        try:
+            # Ensure self.result contains the correct data (e.g., video_data)
+            if not self.result:
+                # raise ValueError("No data to save.")
+                msg_2 = CTkMessagebox(self,title="Error", message=f"No data to save.",
+                        icon="warning", option_1="Return")
+                response = msg_2.get()
+                    
+                if response=="Return":
+                    return
+            
+            self.InstancesControler.SaveToDatabase(self.result)
+            msg_2 = CTkMessagebox(self,title="Error", message=f"Success Saving Data",
+                        icon="check", option_1="OK")
+            response = msg_2.get()
+                    
+            if response=="OK":
+                self.reload_data()
+                self.controller.show_frame("MainPageView")
+                
+
+        except ValueError as ve:
+            print(f"Data error: {ve}")
+            msg_2 = CTkMessagebox(self,title="Error", message=f"Data error: {ve}",
+                    icon="cancel", option_1="Return")
+            response = msg_2.get()
+                
+            if response=="Return":
+                return
+        except sqlite3.Error as db_error:
+            msg_2 = CTkMessagebox(self,title="Error", message=f"Data error: {db_error}",
+                    icon="cancel", option_1="Return")
+            response = msg_2.get()
+                
+            if response=="Return":
+                return
+        except Exception as e:
+            msg_2 = CTkMessagebox(self,title="Error", message=f"Data error: {e}",
+                    icon="cancel", option_1="Return")
+            response = msg_2.get()
+                
+            if response=="Return":
+                return
+
     def show_table(self):
         num_of_comment: int = int(self.sumOfSlide.get())  # Convert to int
         self.result = self.InstancesControler.start_scrapping(self.TokopediaLinkInput.get(), num_of_comment)
@@ -163,8 +210,8 @@ class TokopediaScrapperView(ctk.CTkFrame):
         print(self.result)  # Inspect the contents of result
 
         if isinstance(self.result, dict):  # Ensure result is a dictionary
-            title = self.result['product_name']
-            cleaned_comments = self.result['cleaned_text_list']  # Access the list of cleaned comments
+            title = self.result['title']
+            cleaned_comments = self.result['comments_data']  # Access the list of cleaned comments
             values = [[comment] for comment in cleaned_comments]
             row_count = len(values)
             self.link_place.configure(text=f"{title}")  # Set product title in link placeholder

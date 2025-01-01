@@ -7,6 +7,9 @@ import time
 from datetime import datetime
 import sys
 import os
+import string
+import random
+
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
@@ -17,7 +20,11 @@ class TokopediaScrapperModel:
     def __init__(self):
         self.current_date = datetime.now().strftime('%d %B %Y')
         self.utilsinstances = utils()
-
+        
+    def generate_random_id(length=7):
+        characters = string.ascii_letters + string.digits
+        random_id = ''.join(random.choice(characters) for _ in range(7))
+        return random_id
     def start_scrapping(self, url, pages):
         options = webdriver.ChromeOptions()
         options.add_argument("--start-maximized")
@@ -37,7 +44,8 @@ class TokopediaScrapperModel:
         soup = BeautifulSoup(driver.page_source, "html.parser")
 
         product_name = soup.find('p', {'data-unify': 'Typography', 'class': 'css-1scsi0-unf-heading e1qvo2ff8'})
-
+        current_date = datetime.now().strftime('%d %B %Y')
+        scrapID = self.generate_random_id()
         for i in range(0, pages):
             
             containers = soup.find_all('article', attrs={'class': 'css-72zbc4'})
@@ -77,14 +85,16 @@ class TokopediaScrapperModel:
 
         # Return the data in the desired structure for further processing
         return {
-            "product_name" : product_name.text, 
+            "platform" :'Tokopedia',
+            'date': current_date,
+            "title" : product_name.text,
+            'scrapID' : scrapID, 
             "total_emoji_removed": total_emoji_count,
             "total_url_removed": total_url_count,
             "total_char_removed": total_char_count,
             "total_digit_removed": total_digit_count,
             "total_whitespace_removed": total_whitespace_count,
-            "final_cleaned_text": final_cleaned_text,  # Combine all cleaned text into a single string
-            "cleaned_text_list": total_cleaned_text   # This keeps the individual cleaned comments in a list
+            "comments_data": total_cleaned_text   # This keeps the individual cleaned comments in a list
         }
 
 

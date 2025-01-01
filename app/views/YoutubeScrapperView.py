@@ -139,7 +139,7 @@ class YoutubeScrapperView(ctk.CTkFrame):
         num_of_commnet : int = self.SumOfCommentar.get()
         self.result = self.InstancesControler.get_data(self.YoutubeLinkInput.get(), num_of_commnet)
         
-        self.title = self.result['video_title']
+        self.title = self.result['title']
         cleaned_comments = self.result['comments_data']
         values = [[comment] for comment in cleaned_comments]
         row_count = len(values)
@@ -182,20 +182,50 @@ class YoutubeScrapperView(ctk.CTkFrame):
             CleannedText.place(relx=0.5, rely=0.6, anchor="center")
 
     def SaveToDatabase(self):
-        print(self.result)  # For debugging purposes, to check the content of self.result
+        # print(self.result)  # For debugging purposes, to check the content of self.result
         try:
             # Ensure self.result contains the correct data (e.g., video_data)
             if not self.result:
-                raise ValueError("No data to save.")
+                # raise ValueError("No data to save.")
+                msg_2 = CTkMessagebox(self,title="Error", message=f"No data to save.",
+                        icon="warning", option_1="Return")
+                response = msg_2.get()
+                    
+                if response=="Return":
+                    return
             
             self.InstancesControler.SaveToDatabase(self.result)
+            msg_2 = CTkMessagebox(self,title="Error", message=f"Success Saving Data",
+                        icon="check", option_1="OK")
+            response = msg_2.get()
+                    
+            if response=="OK":
+                self.reload_data()
+                self.controller.show_frame("MainPageView")
+                
 
         except ValueError as ve:
             print(f"Data error: {ve}")
+            msg_2 = CTkMessagebox(self,title="Error", message=f"Data error: {ve}",
+                    icon="cancel", option_1="Return")
+            response = msg_2.get()
+                
+            if response=="Return":
+                return
         except sqlite3.Error as db_error:
-            print(f"Database error: {db_error}")
+            msg_2 = CTkMessagebox(self,title="Error", message=f"Data error: {db_error}",
+                    icon="cancel", option_1="Return")
+            response = msg_2.get()
+                
+            if response=="Return":
+                return
         except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+            msg_2 = CTkMessagebox(self,title="Error", message=f"Data error: {e}",
+                    icon="cancel", option_1="Return")
+            response = msg_2.get()
+                
+            if response=="Return":
+                return
 
 
     def reload_data(self):

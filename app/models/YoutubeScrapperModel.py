@@ -12,7 +12,7 @@ class YoutubeScrapperModel:
         self.api_service_name = "youtube"
         self.api_version = "v3"
         self.DEVELOPER_KEY = os.getenv('YOUTUBE_API_KEY')
-
+    
     def count_elements(self, comment):
         emoji_count = len(emoji.emoji_list(comment))
         url_count = len(re.findall(r'http\S+|www\.\S+', comment))
@@ -103,9 +103,10 @@ class YoutubeScrapperModel:
                 comments_data.append(cleaned_comment)
 
         return {
+            'platform' : 'Youtube',
             'date': current_date,
-            'video_title': video_title,
-            'video_id' : video_ids[0], 
+            'title': video_title,
+            'scrapID' : video_ids[0], 
             'total_emoji_removed': total_emoji_count,
             'total_url_removed': total_url_count,
             'total_char_removed': total_char_count,
